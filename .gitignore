@@ -129,5 +129,6 @@ dmypy.json
 .pyre/
 
 # Secrets
-/spreadsheet/client_secret.json
-/spreadsheet/credentials.json
+client_secret*
+credentials*
+token*

@@ -1,3 +1,5 @@
-from app.spreadsheet import get_data_from_spreadsheet
+from app.spreadsheet import get_and_save_data
+from app.scrapper import scrappe
 
-print(get_data_from_spreadsheet())
+# get_and_save_data()
+scrappe()
