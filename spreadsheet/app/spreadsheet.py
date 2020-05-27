@@ -74,11 +74,11 @@ def update_spreadsheet():
 	data = [
 		{
 			'range': f"D{starting_row}:D{starting_row+len(users)}",
-			'values': [[user["total_xp"]] for user in users]
+			'values': [[user["total_streak"]] for user in users]
 		},
 		{
 			'range': f"F{starting_row}:F{starting_row+len(users)}",
-			'values': [[user["total_streak"]] for user in users]
+			'values': [[user["total_xp"]] for user in users]
 		}
 	]
 	body = {

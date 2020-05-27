@@ -28,7 +28,7 @@ def get_user_info(username):
 		"total_streak": total_streak.get_attribute('innerHTML')
 	}
 
-def scrappe():
+def scrape():
 	users = state.load()
 
 	for user_index, user in enumerate(users):

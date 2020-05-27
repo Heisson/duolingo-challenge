@@ -132,3 +132,6 @@ dmypy.json
 client_secret*
 credentials*
 token*
+
+# Users info
+users.json
