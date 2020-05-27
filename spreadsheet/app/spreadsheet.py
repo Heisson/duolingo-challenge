@@ -11,8 +11,8 @@ from google.auth.transport.requests import Request
 from . import state
 
 scopes = ["https://www.googleapis.com/auth/spreadsheets"]
-# spreadsheet_id = "11sCfPdirODppDGEa5bqAsUW6gO6A6oY4BXUpYlXtQOg"
-spreadsheet_id = "1iPQjZXCwfL58-z4FfjcQFDRn5YTuN5sYiUA3jxqAtJ8"
+spreadsheet_id = "11sCfPdirODppDGEa5bqAsUW6gO6A6oY4BXUpYlXtQOg"
+# spreadsheet_id = "1iPQjZXCwfL58-z4FfjcQFDRn5YTuN5sYiUA3jxqAtJ8"
 client_secrets_file = "credentials.json"
 range_name = "A2:J"
 starting_row = 2
@@ -86,7 +86,10 @@ def update_spreadsheet():
 		'data': data
 	}
 	result = service.spreadsheets().values().batchUpdate(
-		spreadsheetId=spreadsheet_id, body=body).execute()
+		spreadsheetId=spreadsheet_id, 
+		body=body
+		).execute()
+
 	print('{0} cells updated.'.format(result.get('totalUpdatedCells')))
 	
 

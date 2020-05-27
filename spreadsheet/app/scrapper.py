@@ -8,7 +8,7 @@ from . import state
 
 
 chrome_options = Options()
-# chrome_options.add_argument("--headless")
+chrome_options.add_argument("--headless")
 
 driver = webdriver.Chrome(os.getcwd()+'/chromedriver', options=chrome_options)
 
