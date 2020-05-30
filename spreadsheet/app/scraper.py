@@ -35,7 +35,6 @@ def scrape():
 		users[user_index] = get_user_info(user["username"])
 		print(f"Getting info from duome.eu ({(100*(user_index+1)/len(users)):.1f}% complete)")
 
-	print(users)
 	state.save(users)
 
 

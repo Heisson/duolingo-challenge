@@ -70,20 +70,19 @@ def update_spreadsheet():
 	sheet = service.spreadsheets()
 
 	users = state.load()
-
-	data = [
-		{
-			'range': f"D{starting_row}:D{starting_row+len(users)}",
-			'values': [[user["total_streak"]] for user in users]
-		},
-		{
-			'range': f"F{starting_row}:F{starting_row+len(users)}",
-			'values': [[user["total_xp"]] for user in users]
-		}
-	]
+	
 	body = {
 		'valueInputOption': 'RAW',
-		'data': data
+		'data': [
+			{
+				'range': f"D{starting_row}:D{starting_row+len(users)}",
+				'values': [[user["total_streak"]] for user in users]
+			},
+			{
+				'range': f"F{starting_row}:F{starting_row+len(users)}",
+				'values': [[user["total_xp"]] for user in users]
+			}
+		]
 	}
 	result = service.spreadsheets().values().batchUpdate(
 		spreadsheetId=spreadsheet_id, 
