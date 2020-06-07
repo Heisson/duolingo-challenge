@@ -1,6 +1,3 @@
-# Get the data from the spreadsheet
-# Convert data to Json format (to be easy to handle)
-
 import pickle
 import os.path
 
@@ -27,6 +24,7 @@ def get_usernames(data):
 			})
 
 	return users
+	
 
 def get_service():
 	print("Getting usernames from spreadsheet.")
@@ -70,7 +68,7 @@ def update_spreadsheet():
 	sheet = service.spreadsheets()
 
 	users = state.load()
-	
+
 	body = {
 		'valueInputOption': 'RAW',
 		'data': [
@@ -85,12 +83,12 @@ def update_spreadsheet():
 		]
 	}
 	result = service.spreadsheets().values().batchUpdate(
-		spreadsheetId=spreadsheet_id, 
+		spreadsheetId=spreadsheet_id,
 		body=body
 		).execute()
 
 	print('{0} cells updated.'.format(result.get('totalUpdatedCells')))
-	
+
 
 def get_and_save_data():
 	data = get_data_from_spreadsheet()
