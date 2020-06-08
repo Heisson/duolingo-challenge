@@ -1,17 +1,20 @@
 from requests_html import HTML, HTMLSession
 
 
-username = "heiss.on"
-username = "IranildaNunes"
+# username = "heiss.on"
+username = "PedrohSampaioo"
 
-spans = HTMLSession().get(
+response_html = HTMLSession().get(
     f"http://duome.eu/{username}",
     headers={
         "Cookie": f"PHPSESSID=4dfcaa82cc994ccc6b18d5f906a197bd",
     },
-).html.find("span")
+).html
 
-xp = int(spans[1].text.replace(" XP", ""))
-streak = int((spans[4] if len(spans) <= 54 else spans[5]).text)
+xp = response_html.xpath("/html/body/div[2]/div[1]/div[3]/h2/span[1]", first=True).text
+streak = response_html.xpath("/html/body/div[2]/div[1]/div[3]/h2/span[3]", first=True).text
+
+if "#" in streak:
+	streak = response_html.xpath("/html/body/div[2]/div[1]/div[3]/h2/span[3]/span[1]", first=True).text
 
 print(f"streak: {streak}\nxp: {xp}")
