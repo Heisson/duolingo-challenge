@@ -16,7 +16,7 @@ range_name = f"A{starting_row}:J"
 
 
 def get_spreadsheet():
-	print("Getting usernames from spreadsheet.")
+	print("Getting spreadsheet.")
 
 	credentials = None
 	if os.path.exists("token.pickle"):
@@ -76,7 +76,7 @@ def update_spreadsheet(users):
 		body=body
 	).execute()
 
-	print('{0} cells updated.'.format(result.get('totalUpdatedCells')))
+	print(f"Done. {result.get('totalUpdatedCells')} cells updated.")
 
 
 def get_users_info(users):
