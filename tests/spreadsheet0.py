@@ -5,7 +5,7 @@ from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 
-from . import state
+from requests_html import HTML, HTMLSession
 
 scopes = ["https://www.googleapis.com/auth/spreadsheets"]
 spreadsheet_id = "11sCfPdirODppDGEa5bqAsUW6gO6A6oY4BXUpYlXtQOg"
@@ -13,12 +13,6 @@ spreadsheet_id = "11sCfPdirODppDGEa5bqAsUW6gO6A6oY4BXUpYlXtQOg"
 client_secrets_file = "credentials.json"
 starting_row = 2
 range_name = f"A{starting_row}:J"
-
-def get_usernames(data):
-	return [
-		{"username": row[0][row[0].find("(")+1:row[0].find(")")]}
-		for row in data
-	]
 
 
 def get_spreadsheet():
@@ -44,26 +38,25 @@ def get_spreadsheet():
 	return spreadsheet
 
 
-def get_data_from_spreadsheet():
-	spreadsheet = get_spreadsheet()
-	sheet = spreadsheet.spreadsheets()
-	result = sheet.values().get(spreadsheetId=spreadsheet_id, range=range_name).execute()
+def get_usernames():
+	sheet = get_spreadsheet().spreadsheets()
+
+	result = sheet.values().get(
+		spreadsheetId=spreadsheet_id,
+		range=range_name
+	).execute()
 
 	data = result.get("values", [])
 
-	return data if data else None
-	#
-	# if not data:
-	# 	print("No data found.")
-	# 	return None
-	# else:
-	# 	return data
+	return [
+		{"username": row[0][row[0].find("(")+1:row[0].find(")")]}
+		for row in data
+	]
+	
 
-def update_spreadsheet():
+def update_spreadsheet(users):
 	spreadsheet = get_spreadsheet()
 	sheet = spreadsheet.spreadsheets()
-
-	users = state.load()
 
 	body = {
 		'valueInputOption': 'RAW',
@@ -86,11 +79,31 @@ def update_spreadsheet():
 	print('{0} cells updated.'.format(result.get('totalUpdatedCells')))
 
 
-def get_and_save_data():
-	data = get_data_from_spreadsheet()
-	users = get_usernames(data)
-	state.save(users)
+def get_users_info(users):
+	for user_index, user in enumerate(users):
+		username = user["username"]
+
+		response_html = HTMLSession().get(
+			f"http://duome.eu/{username}",
+			headers={"Cookie": f"PHPSESSID=4dfcaa82cc994ccc6b18d5f906a197bd",},
+		).html
+
+		streak = response_html.xpath("/html/body/div[2]/div[1]/div[3]/h2/span[3]", first=True).text
+		if "#" in streak:
+			streak = response_html.xpath("/html/body/div[2]/div[1]/div[3]/h2/span[3]/span[1]", first=True).text
+
+		users[user_index] = {
+			"username": username,
+			"total_xp": response_html.xpath("/html/body/div[2]/div[1]/div[3]/h2/span[1]", first=True).text.replace(" XP", ""),
+			"total_streak": streak
+		}
+
+		print(f"Getting info from duome.eu ({(100*(user_index+1)/len(users)):.1f}% complete)")
+
+	return users
 
 
 if __name__ == '__main__':
-	pass
+	users = get_usernames()
+	users = get_users_info(users)
+	update_spreadsheet(users)
