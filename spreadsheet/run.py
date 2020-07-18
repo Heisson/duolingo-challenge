@@ -85,7 +85,7 @@ def get_users_info(users):
 
 		response_html = HTMLSession().get(
 			f"http://duome.eu/{username}",
-			headers={"Cookie": f"PHPSESSID=4dfcaa82cc994ccc6b18d5f906a197bd",},
+			headers={"Cookie": "PHPSESSID=35320e00a6a24913de095789213d87ef",},
 		).html
 
 		streak = response_html.xpath("/html/body/div[2]/div[1]/div[3]/h2/span[3]", first=True).text
